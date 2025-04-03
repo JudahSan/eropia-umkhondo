@@ -189,107 +189,20 @@ def app():
         unsafe_allow_html=True
     )
     
-    # Top Navigation - with responsive design
-    st.markdown("""
-    <style>
-    /* CSS for responsive navigation */
-    .nav-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        background-color: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-    }
-    
-    .nav-logo {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1E3A8A;
-    }
-    
-    .nav-buttons {
-        display: flex;
-        gap: 12px;
-    }
-    
-    .nav-icon-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #1E88E5;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 1.1rem;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    
-    .nav-icon-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    
-    .nav-icon-button.login {
-        background-color: #1E88E5;
-    }
-    
-    .nav-icon-button.register {
-        background-color: #2E7D32;
-    }
-    
-    /* Hide Streamlit elements for the buttons */
-    div[data-testid="stHorizontalBlock"] {
-        height: 0;
-        visibility: hidden;
-    }
-    
-    @media (max-width: 768px) {
-        .nav-logo {
-            font-size: 1.2rem;
-        }
-    }
-    </style>
-    
-    <div class="nav-container">
-        <div class="nav-logo">Eropia umkhondo</div>
-        <div class="nav-buttons">
-            <button class="nav-icon-button login" id="login-btn" title="Login">👤</button>
-            <button class="nav-icon-button register" id="register-btn" title="Register">➕</button>
-        </div>
-    </div>
-    
-    <script>
-        // Add event listeners to the buttons
-        document.getElementById('login-btn').addEventListener('click', function() {
-            // This will be picked up by the hidden button
-            document.querySelector('button[data-testid="element-1"]').click();
-        });
-        
-        document.getElementById('register-btn').addEventListener('click', function() {
-            // This will be picked up by the hidden button
-            document.querySelector('button[data-testid="element-2"]').click();
-        });
-    </script>
-    """, unsafe_allow_html=True)
-    
-    # Hidden buttons that will be triggered by the JavaScript code
-    col1, col2 = st.columns(2)
+    # Top Navigation
+    col1, col2 = st.columns([2, 1])
     with col1:
-        if st.button("", key="1", help="Hidden login button"):
-            st.session_state.current_page = "login"
-            st.rerun()
+        st.write("# Eropia umkhondo")
     with col2:
-        if st.button("", key="2", help="Hidden register button"):
-            st.session_state.current_page = "register"
-            st.rerun()
+        cols = st.columns(2)
+        with cols[0]:
+            if st.button("Login", key="nav_login", use_container_width=True):
+                st.session_state.current_page = "login"
+                st.rerun()
+        with cols[1]:
+            if st.button("Register", key="nav_register", use_container_width=True):
+                st.session_state.current_page = "register"
+                st.rerun()
     
     # Hero Section
     st.markdown("""
