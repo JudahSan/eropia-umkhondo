@@ -56,17 +56,20 @@ def main():
                     st.rerun()
     
     # Handle page routing
-    if st.session_state.current_page == "login":
-        login_page.app()
-    elif st.session_state.current_page == "register":
-        register_page.app()
-    elif st.session_state.current_page == "dashboard":
-        # Show the dashboard content
+    if "username" in st.session_state:
+        # If user is logged in, only show dashboard regardless of current_page
+        # This ensures login/register are completely hidden
         dashboard_page.app()
     else:
-        # Default to login if an invalid page is somehow set
-        st.session_state.current_page = "login"
-        st.rerun()
+        # Only if user is not logged in, show login/register pages
+        if st.session_state.current_page == "login":
+            login_page.app()
+        elif st.session_state.current_page == "register":
+            register_page.app()
+        else:
+            # Default to login if an invalid page is somehow set
+            st.session_state.current_page = "login"
+            st.rerun()
 
 if __name__ == "__main__":
     main()

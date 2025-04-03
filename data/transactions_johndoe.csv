@@ -1,1 +1,4 @@
 date,description,amount,type,category,source,user_id
+2025-04-03,Nyama Choma,10.0,expense,Food,,johndoe
+2025-04-03,Salary,100000.0,expense,Salary,,johndoe
+2025-04-03,Salary,900000.0,income,Salary,,johndoe

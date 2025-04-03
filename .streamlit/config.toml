@@ -2,9 +2,22 @@
 headless = true
 address = "0.0.0.0"
 port = 5000
+enableXsrfProtection = false
+enableCORS = false
 
 [theme]
-primaryColor = "#F63366"
+primaryColor = "#1E88E5"
 backgroundColor = "#FFFFFF"
 secondaryBackgroundColor = "#F0F2F6"
 textColor = "#262730"
+font = "sans serif"
+
+[browser]
+gatherUsageStats = false
+
+[global]
+developmentMode = false
+showWarningOnDirectExecution = false
+
+[ui]
+hideTopBar = false

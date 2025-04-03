@@ -69,8 +69,7 @@ def plot_transaction_overview(df):
         xaxis_title="Date",
         yaxis_title="Daily Net (KSh)",
         yaxis2=dict(
-            title="Running Balance (KSh)",
-            titlefont=dict(color="royalblue"),
+            title=dict(text="Running Balance (KSh)", font=dict(color="royalblue")),
             tickfont=dict(color="royalblue"),
             overlaying="y",
             side="right"
