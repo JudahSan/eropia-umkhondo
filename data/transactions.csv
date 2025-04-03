@@ -1,1 +1,20 @@
 date,description,amount,type,category,source
+2023-03-01,Salary,150000.0,income,Salary,manual
+2023-03-05,Rent,45000.0,expense,Housing,manual
+2023-03-07,Groceries,12500.0,expense,Food,manual
+2023-03-10,Internet Bill,5000.0,expense,Utilities,manual
+2023-03-15,Lunch with coworkers,2500.0,expense,Food,manual
+2023-03-18,Uber ride,750.0,expense,Transport,manual
+2023-03-20,Movie tickets,1800.0,expense,Entertainment,manual
+2023-03-25,Gym membership,5000.0,expense,Health,manual
+2023-03-28,Freelance project,35000.0,income,Other,manual
+2023-04-01,Salary,150000.0,income,Salary,manual
+2023-04-05,Rent,45000.0,expense,Housing,manual
+2023-04-08,Dinner out,3500.0,expense,Food,manual
+2023-04-10,Mobile phone bill,2000.0,expense,Utilities,manual
+2023-04-12,Groceries,15000.0,expense,Food,manual
+2023-04-15,Electricity bill,4500.0,expense,Utilities,manual
+2023-04-18,Clothes shopping,8500.0,expense,Shopping,manual
+2023-04-20,Weekend getaway,22000.0,expense,Travel,manual
+2023-04-25,Gym membership,5000.0,expense,Health,manual
+2023-04-28,Side hustle,25000.0,income,Other,manual

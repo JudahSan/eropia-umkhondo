@@ -6,10 +6,30 @@ from datetime import datetime
 class DataManager:
     """Class to manage transaction data storage and retrieval"""
     
-    def __init__(self, file_path="data/transactions.csv"):
-        """Initialize the data manager with a file path for storage"""
-        self.file_path = file_path
+    def __init__(self, username=None, data_dir="data"):
+        """Initialize the data manager with a username for storage
+        
+        Args:
+            username (str): Username for per-user storage (if None, uses shared storage)
+            data_dir (str): Base directory for data storage
+        """
+        self.username = username
+        self.data_dir = data_dir
+        self.file_path = self._get_file_path()
         self.ensure_data_file_exists()
+    
+    def _get_file_path(self):
+        """Get the file path for the current user
+        
+        Returns:
+            str: Path to the user's transaction data file
+        """
+        if self.username:
+            # Use user-specific file
+            return os.path.join(self.data_dir, f"transactions_{self.username}.csv")
+        else:
+            # Use shared file (for backward compatibility)
+            return os.path.join(self.data_dir, "transactions.csv")
     
     def ensure_data_file_exists(self):
         """Create data directory and file if they don't exist"""
@@ -24,7 +44,7 @@ class DataManager:
             # Create an empty DataFrame with the required columns
             empty_df = pd.DataFrame(columns=[
                 'date', 'description', 'amount', 'type', 
-                'category', 'source'
+                'category', 'source', 'user_id'
             ])
             empty_df.to_csv(self.file_path, index=False)
     
@@ -37,6 +57,10 @@ class DataManager:
             # Convert date strings to datetime objects
             if not df.empty:
                 df['date'] = pd.to_datetime(df['date'])
+                
+                # Filter by username if set
+                if self.username and 'user_id' in df.columns:
+                    df = df[df['user_id'] == self.username]
             
             return df
         except Exception as e:
@@ -44,7 +68,7 @@ class DataManager:
             # Return an empty DataFrame with the correct columns
             return pd.DataFrame(columns=[
                 'date', 'description', 'amount', 'type', 
-                'category', 'source'
+                'category', 'source', 'user_id'
             ])
     
     def add_transaction(self, transaction):
@@ -57,6 +81,10 @@ class DataManager:
             # Convert transaction date to string if it's a datetime object
             if isinstance(transaction['date'], datetime):
                 transaction['date'] = transaction['date'].strftime('%Y-%m-%d')
+            
+            # Add user_id to transaction if not present
+            if 'user_id' not in transaction and self.username:
+                transaction['user_id'] = self.username
                 
             # Read existing transactions
             df = self.get_transactions()
@@ -64,8 +92,14 @@ class DataManager:
             # Convert to DataFrame and append
             new_df = pd.DataFrame([transaction])
             
+            # Read all transactions (without user filtering)
+            try:
+                all_df = pd.read_csv(self.file_path)
+            except:
+                all_df = pd.DataFrame(columns=new_df.columns)
+                
             # Combine and save
-            combined_df = pd.concat([df, new_df], ignore_index=True)
+            combined_df = pd.concat([all_df, new_df], ignore_index=True)
             combined_df.to_csv(self.file_path, index=False)
             
             return True
@@ -81,14 +115,20 @@ class DataManager:
             new_category (str): The new category to assign
         """
         try:
-            # Read existing transactions
-            df = self.get_transactions()
+            # Read all transactions
+            all_df = pd.read_csv(self.file_path)
+            
+            # Ensure we're only updating the user's own transactions
+            if self.username and 'user_id' in all_df.columns:
+                if transaction_idx not in all_df.index or all_df.loc[transaction_idx, 'user_id'] != self.username:
+                    print("Unauthorized attempt to update transaction")
+                    return False
             
             # Update the category
-            df.loc[transaction_idx, 'category'] = new_category
+            all_df.loc[transaction_idx, 'category'] = new_category
             
             # Save back to CSV
-            df.to_csv(self.file_path, index=False)
+            all_df.to_csv(self.file_path, index=False)
             
             return True
         except Exception as e:
@@ -102,14 +142,20 @@ class DataManager:
             transaction_idx (int): The index of the transaction to delete
         """
         try:
-            # Read existing transactions
-            df = self.get_transactions()
+            # Read all transactions
+            all_df = pd.read_csv(self.file_path)
+            
+            # Ensure we're only deleting the user's own transactions
+            if self.username and 'user_id' in all_df.columns:
+                if transaction_idx not in all_df.index or all_df.loc[transaction_idx, 'user_id'] != self.username:
+                    print("Unauthorized attempt to delete transaction")
+                    return False
             
             # Remove the transaction
-            df = df.drop(transaction_idx)
+            all_df = all_df.drop(transaction_idx)
             
             # Save back to CSV
-            df.to_csv(self.file_path, index=False)
+            all_df.to_csv(self.file_path, index=False)
             
             return True
         except Exception as e:

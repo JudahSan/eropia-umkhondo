@@ -1,16 +1,20 @@
 import requests
 import base64
 import json
-import datetime
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class MPesaAPI:
     """Class to interact with the M-Pesa API for transaction data"""
     
-    def __init__(self):
-        """Initialize the M-Pesa API client with credentials"""
+    def __init__(self, username=None, auth_manager=None):
+        """Initialize the M-Pesa API client with credentials
+        
+        Args:
+            username (str): Username for the current user
+            auth_manager (AuthManager): Authentication manager instance
+        """
         # Get API credentials from environment variables
         self.consumer_key = os.getenv("MPESA_CONSUMER_KEY", "")
         self.consumer_secret = os.getenv("MPESA_CONSUMER_SECRET", "")
@@ -19,6 +23,10 @@ class MPesaAPI:
         # Authentication token cache
         self.auth_token = None
         self.token_expiry = None
+        
+        # User-specific data
+        self.username = username
+        self.auth_manager = auth_manager
     
     def get_auth_token(self):
         """Get OAuth authentication token from M-Pesa API
@@ -48,7 +56,7 @@ class MPesaAPI:
                 self.auth_token = response_data.get('access_token')
                 
                 # Set token expiry (typically 1 hour)
-                self.token_expiry = datetime.now() + datetime.timedelta(seconds=3599)
+                self.token_expiry = datetime.now() + timedelta(seconds=3599)
                 
                 return self.auth_token
             else:
@@ -70,6 +78,15 @@ class MPesaAPI:
         Returns:
             list: List of transaction dictionaries
         """
+        # Security check: Ensure user can only access their own phone numbers
+        if self.username and self.auth_manager:
+            # Get the user's registered phone number
+            user_phone = self.auth_manager.get_user_phone_number(self.username)
+            
+            # If phone numbers don't match and user is not admin, deny access
+            if user_phone and user_phone != phone_number and not self.auth_manager.is_admin(self.username):
+                raise ValueError("You can only access transactions for your registered phone number.")
+        
         # In a real implementation, this would call the M-Pesa API
         # For this example, I'll simulate the API response since we don't have actual API access
         

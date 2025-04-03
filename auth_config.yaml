@@ -1,0 +1,15 @@
+credentials:
+  usernames:
+    demo:
+      email: demo@example.com
+      name: Demo User
+      password: $2b$12$QGJ0gtHIq1rVl4r8FWBte.eOa1Yy7xp/m2bBVdexDQGcxkhngTKku
+      phone_number: "254712345678"
+      role: user
+cookie:
+  expiry_days: 30
+  key: finance_tracker_auth_key
+  name: finance_tracker_auth_cookie
+preauthorized:
+  emails:
+    - admin@example.com
