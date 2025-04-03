@@ -177,8 +177,15 @@ class DataManager:
         if df.empty:
             return df
             
+        # Convert dates to pandas datetime format for consistent comparison
+        start_date_pd = pd.to_datetime(start_date)
+        end_date_pd = pd.to_datetime(end_date)
+        
+        # Ensure df['date'] is pandas datetime
+        df['date'] = pd.to_datetime(df['date'])
+        
         # Filter by date range
-        mask = (df['date'] >= start_date) & (df['date'] <= end_date)
+        mask = (df['date'] >= start_date_pd) & (df['date'] <= end_date_pd)
         return df[mask]
     
     def get_transactions_by_category(self, category):

@@ -21,87 +21,13 @@ def app():
         max-width: 100% !important;
     }
     
-    /* Navigation bar */
-    .nav-container {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding: 1rem 2rem;
-        background-color: #FFFFFF;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-    }
-    
-    .nav-logo {
-        margin-right: auto;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1E3A8A;
-    }
-    
-    .nav-links {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-    }
-    
-    /* Navigation buttons */
-    .nav-button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        padding: 0.6rem 1.2rem;
-        border-radius: 8px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-    
-    .nav-button.primary {
-        background-color: #1E88E5;
-        color: white;
-        border: none;
-    }
-    
-    .nav-button.primary:hover {
-        background-color: #1976D2;
-    }
-    
-    .nav-button.secondary {
-        background-color: white;
-        color: #1E88E5;
-        border: 2px solid #1E88E5;
-    }
-    
-    .nav-button.secondary:hover {
-        background-color: #F3F4F6;
-    }
-    
-    /* Navigation icons for mobile */
-    .nav-icon {
-        display: none;
-        background: none;
-        border: none;
-        font-size: 1.4rem;
-        color: #1E88E5;
-        padding: 0.5rem;
-        cursor: pointer;
-        margin-left: 0.5rem;
-    }
-    
     /* Hero section */
     .hero-container {
         text-align: center;
-        padding: 7rem 1rem 5rem 1rem; /* Extra padding at top for fixed navbar */
+        padding: 5rem 1rem;
         background: linear-gradient(135deg, #1E3A8A 0%, #1E88E5 100%);
         color: white;
         margin-bottom: 3rem;
-        width: 100%;
     }
     
     .hero-title {
@@ -122,16 +48,14 @@ def app():
     
     /* Feature section */
     .feature-section {
+        padding: 3rem 1rem;
         max-width: 1200px;
         margin: 0 auto;
-        padding: 2rem 1rem;
-        text-align: center;
     }
     
-    .feature-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 2rem;
         margin-bottom: 3rem;
     }
@@ -141,7 +65,6 @@ def app():
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         padding: 2rem;
-        width: 300px;
         text-align: center;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -176,7 +99,6 @@ def app():
         padding: 4rem 1rem;
         background-color: #F3F4F6;
         margin-bottom: 3rem;
-        width: 100%;
     }
     
     .cta-title {
@@ -194,51 +116,6 @@ def app():
         margin-left: auto;
         margin-right: auto;
         line-height: 1.7;
-    }
-    
-    .cta-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-    
-    /* Button styling */
-    .button {
-        display: inline-block;
-        padding: 0.75rem 2rem;
-        font-size: 1.1rem;
-        font-weight: 500;
-        border-radius: 8px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        width: 180px;
-    }
-    
-    .button.primary {
-        background-color: #1E88E5;
-        color: white;
-        border: none;
-    }
-    
-    .button.primary:hover {
-        background-color: #1976D2;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        transform: translateY(-3px);
-    }
-    
-    .button.secondary {
-        background-color: white;
-        color: #1E88E5;
-        border: 2px solid #1E88E5;
-    }
-    
-    .button.secondary:hover {
-        background-color: #F3F4F6;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        transform: translateY(-3px);
     }
     
     /* Cultural context section */
@@ -268,7 +145,6 @@ def app():
         background-color: #1E3A8A;
         color: white;
         margin-top: 2rem;
-        width: 100%;
     }
     
     .footer-text {
@@ -276,29 +152,8 @@ def app():
         color: rgba(255, 255, 255, 0.8);
     }
     
-    /* Streamlit specific overrides */
-    .stButton>button, .stTextInput>div>div>input {
-        width: 100%; 
-    }
-    
     /* Responsive styling */
     @media (max-width: 768px) {
-        .nav-container {
-            padding: 0.8rem 1rem;
-        }
-        
-        .nav-button {
-            display: none;
-        }
-        
-        .nav-icon {
-            display: inline-flex;
-        }
-        
-        .hero-container {
-            padding: 6rem 1rem 3rem 1rem;
-        }
-        
         .hero-title {
             font-size: 2.8rem;
         }
@@ -307,13 +162,8 @@ def app():
             font-size: 1.2rem;
         }
         
-        .feature-container {
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .feature-card {
-            width: 100%;
+        .feature-grid {
+            grid-template-columns: 1fr;
         }
         
         .cta-title {
@@ -322,15 +172,6 @@ def app():
         
         .cta-text {
             font-size: 1.1rem;
-        }
-        
-        .cta-buttons {
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .button {
-            width: 100%;
         }
     }
     </style>
@@ -348,68 +189,20 @@ def app():
         unsafe_allow_html=True
     )
     
-    # Navigation Bar
-    st.markdown("""
-    <div class="nav-container">
-        <div class="nav-logo">Eropia umkhondo</div>
-        <div class="nav-links">
-            <!-- Desktop buttons -->
-            <a class="nav-button secondary" id="login-btn">Login</a>
-            <a class="nav-button primary" id="register-btn">Register</a>
-            
-            <!-- Mobile icons -->
-            <a class="nav-icon" id="login-icon">👤</a>
-            <a class="nav-icon" id="register-icon">➕</a>
-        </div>
-    </div>
-    
-    <script>
-        // Add event listeners to navigation elements
-        document.getElementById('login-btn').addEventListener('click', function() {
-            // This will be picked up by Streamlit's event handler
-            window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'login'}, '*');
-        });
-        
-        document.getElementById('register-btn').addEventListener('click', function() {
-            window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'register'}, '*');
-        });
-        
-        document.getElementById('login-icon').addEventListener('click', function() {
-            window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'login'}, '*');
-        });
-        
-        document.getElementById('register-icon').addEventListener('click', function() {
-            window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'register'}, '*');
-        });
-    </script>
-    """, unsafe_allow_html=True)
-    
-    # Create hidden buttons for navigation that will be triggered by JavaScript
-    if st.button("Login Hidden", key="login_hidden", help="Hidden button for login", label_visibility="collapsed"):
-        st.session_state.current_page = "login"
-        st.rerun()
-        
-    if st.button("Register Hidden", key="register_hidden", help="Hidden button for register", label_visibility="collapsed"):
-        st.session_state.current_page = "register"
-        st.rerun()
-        
-    # JavaScript to listen for messages and click the corresponding hidden button
-    st.markdown("""
-    <script>
-        // Listen for messages from our custom HTML elements
-        window.addEventListener('message', function(event) {
-            if (event.data.type === 'streamlit:setComponentValue') {
-                if (event.data.value === 'login') {
-                    // Find and click the hidden login button
-                    document.querySelector('button[data-testid="login_hidden"]').click();
-                } else if (event.data.value === 'register') {
-                    // Find and click the hidden register button
-                    document.querySelector('button[data-testid="register_hidden"]').click();
-                }
-            }
-        });
-    </script>
-    """, unsafe_allow_html=True)
+    # Top Navigation
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        st.write("# Eropia umkhondo")
+    with col2:
+        cols = st.columns(2)
+        with cols[0]:
+            if st.button("Login", key="nav_login", use_container_width=True):
+                st.session_state.current_page = "login"
+                st.rerun()
+        with cols[1]:
+            if st.button("Register", key="nav_register", use_container_width=True):
+                st.session_state.current_page = "register"
+                st.rerun()
     
     # Hero Section
     st.markdown("""
@@ -422,7 +215,7 @@ def app():
     # Feature Section
     st.markdown("""
     <div class="feature-section">
-        <div class="feature-container">
+        <div class="feature-grid">
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
                 <h3 class="feature-title">Visual Analytics</h3>
@@ -449,24 +242,21 @@ def app():
     <div class="cta-container">
         <h2 class="cta-title">Start Your Financial Journey Today</h2>
         <p class="cta-text">Join thousands of users who have taken control of their finances with Eropia umkhondo. It's free to start!</p>
-        
-        <div class="cta-buttons">
-            <a class="button primary" id="cta-register-btn">Create Account</a>
-            <a class="button secondary" id="cta-login-btn">Login</a>
-        </div>
     </div>
-    
-    <script>
-        // Add event listeners to CTA buttons
-        document.getElementById('cta-register-btn').addEventListener('click', function() {
-            window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'register'}, '*');
-        });
-        
-        document.getElementById('cta-login-btn').addEventListener('click', function() {
-            window.parent.postMessage({type: 'streamlit:setComponentValue', value: 'login'}, '*');
-        });
-    </script>
     """, unsafe_allow_html=True)
+    
+    # CTA Buttons
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        col_left, col_right = st.columns(2)
+        with col_left:
+            if st.button("Create Account", key="cta_create_account_btn", use_container_width=True):
+                st.session_state.current_page = "register"
+                st.rerun()
+        with col_right:
+            if st.button("Login", key="cta_login_btn", use_container_width=True):
+                st.session_state.current_page = "login"
+                st.rerun()
     
     # Cultural Context Section
     st.markdown("""

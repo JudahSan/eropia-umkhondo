@@ -28,22 +28,22 @@ def categorize_transaction(description):
         
     # Housing & Utilities
     if any(keyword in description for keyword in [
-        'rent', 'house', 'apartment', 'water', 'electricity', 'power', 'kplc', 'bill',
-        'utility', 'gas', 'housing', 'mortgage', 'accommodation', 'airbnb', 'hotel',
-        'internet', 'wifi', 'safaricom home', 'zuku'
+        'rent', 'house', 'apartment', 'water', 'electricity', 'power', 'kplc',
+        'gas', 'housing', 'mortgage', 'accommodation', 'airbnb', 'hotel'
     ]):
         return 'Housing'
     
     # Bills & Utilities
     if any(keyword in description for keyword in [
         'bill', 'utility', 'internet', 'wifi', 'airtime', 'safaricom', 'telkom', 'airtel',
-        'phone', 'data', 'subscription', 'dstv', 'netflix', 'spotify', 'showmax', 'bundle'
+        'phone', 'data', 'subscription', 'dstv', 'netflix', 'spotify', 'showmax', 'bundle', 
+        'wifi bill'
     ]):
         return 'Utilities'
         
     # Entertainment
     if any(keyword in description for keyword in [
-        'cinema', 'movie', 'ticket', 'concert', 'event', 'game', 'betting', 'sportpesa',
+        'cinema', 'movie', 'concert', 'event', 'game', 'betting', 'sportpesa',
         'betika', 'entertainment', 'party', 'club', 'bar', 'alcohol', 'beer', 'fun',
         'leisure', 'recreation'
     ]):
@@ -104,9 +104,13 @@ def parse_mpesa_statement(statement_text):
     
     transactions = []
     
+    # Skip processing if empty text
+    if not statement_text or statement_text.strip() == "":
+        return transactions
+    
     # Regular expression to match M-Pesa transaction patterns
-    # This is a simplified version and might need adjustment based on actual statement format
-    pattern = r'(\d{2}/\d{2}/\d{4})\s+([\w\s]+)\s+(\d+[\.\d]*)\s+([\w\s]+)'
+    # Format: date description amount transaction_type
+    pattern = r'(\d{2}/\d{2}/\d{4})\s+(MPESA[\w\s]+)\s+([\d,\.]+)\s+(debit|credit)'
     
     matches = re.finditer(pattern, statement_text)
     
@@ -116,11 +120,11 @@ def parse_mpesa_statement(statement_text):
         # Parse date
         date = datetime.strptime(date_str, '%d/%m/%Y').date()
         
-        # Parse amount
+        # Parse amount - remove commas for proper float conversion
         amount = float(amount_str.replace(',', ''))
         
         # Determine transaction type (income/expense)
-        if any(t in transaction_type.lower() for t in ['receive', 'deposit', 'credit']):
+        if transaction_type.lower() == 'credit':
             type_category = 'income'
         else:
             type_category = 'expense'

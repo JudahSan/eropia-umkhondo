@@ -10,31 +10,34 @@ from data_manager import DataManager
 @pytest.fixture
 def temp_config_file():
     """Create a temporary YAML config file for testing"""
-    with tempfile.NamedTemporaryFile(suffix='.yaml', delete=False) as temp_file:
-        # Create a test config
-        test_config = {
-            'cookie': {'expiry_days': 30, 'key': 'test_cookie', 'name': 'test_cookie'},
-            'credentials': {
-                'usernames': {
-                    'testuser': {
-                        'email': 'testuser@example.com',
-                        'name': 'Test User',
-                        'password': '$2b$12$ZnAREWBZyYtG/YWkjmUr5Odn.ACZlRPD029QKzKYq3PvmvD7Zhgey',  # 'password'
-                        'phone_number': '2547123456789',
-                        'role': 'user'
-                    }
-                }
-            },
-            'preauthorized': {'emails': []}
-        }
-        yaml.dump(test_config, temp_file)
-        config_path = temp_file.name
+    temp_file_path = os.path.join(tempfile.gettempdir(), "test_auth_config.yaml")
     
-    yield config_path
+    # Create a test config
+    test_config = {
+        'cookie': {'expiry_days': 30, 'key': 'test_cookie', 'name': 'test_cookie'},
+        'credentials': {
+            'usernames': {
+                'testuser': {
+                    'email': 'testuser@example.com',
+                    'name': 'Test User',
+                    'password': '$2b$12$ZnAREWBZyYtG/YWkjmUr5Odn.ACZlRPD029QKzKYq3PvmvD7Zhgey',  # 'password'
+                    'phone_number': '2547123456789',
+                    'role': 'user'
+                }
+            }
+        },
+        'preauthorized': {'emails': []}
+    }
+    
+    # Write to file manually to avoid encoding issues
+    with open(temp_file_path, 'wb') as f:
+        yaml.dump(test_config, f, encoding='utf-8')
+    
+    yield temp_file_path
     
     # Clean up the temp file
-    if os.path.exists(config_path):
-        os.unlink(config_path)
+    if os.path.exists(temp_file_path):
+        os.unlink(temp_file_path)
         
 @pytest.fixture
 def auth_manager(temp_config_file):

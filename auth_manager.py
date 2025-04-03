@@ -206,6 +206,6 @@ class AuthManager:
             bool: True if the user is an admin, False otherwise
         """
         user_info = self.get_user_info(username)
-        if user_info and 'is_admin' in user_info:
-            return user_info['is_admin']
+        if user_info and 'role' in user_info and user_info['role'] == 'admin':
+            return True
         return False
