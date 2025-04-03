@@ -43,73 +43,23 @@ def main():
         if "username" in st.session_state:
             st.write(f"Logged in as: {st.session_state.username}")
             
-            # Add an attractive container for the navigation
-            st.markdown("""
-            <style>
-            .nav-container {
-                background-color: #f0f8ff;
-                border-radius: 10px;
-                padding: 10px;
-                margin: 10px 0;
-                border-left: 3px solid #4682b4;
-            }
-            </style>
-            <div class="nav-container">
-            <p style="font-weight: bold; color: #1E3A8A; margin-bottom: 10px;">Navigation</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Add styling for the buttons
-            st.markdown("""
-            <style>
-            .stButton>button {
-                background-color: #1E88E5;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                padding: 8px 16px;
-                width: 100%;
-                margin-bottom: 8px;
-                transition: all 0.3s ease;
-            }
-            .stButton>button:hover {
-                background-color: #1565C0;
-                transform: translateY(-2px);
-                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            }
-            .logout-button>button {
-                background-color: #e57373;
-            }
-            .logout-button>button:hover {
-                background-color: #c62828;
-            }
-            </style>
-            """, unsafe_allow_html=True)
-            
-            # Create menu tabs for navigation
-            st.markdown('<div class="nav-container">', unsafe_allow_html=True)
-            
             # Show dashboard button
-            if st.button("Dashboard", key="dashboard_btn", help="View your financial dashboard"):
+            if st.button("Dashboard", key="dashboard_btn"):
                 st.session_state.current_page = "dashboard"
                 st.rerun()
             
             # Show profile button
-            if st.button("Profile", key="profile_btn", help="Edit your profile settings"):
+            if st.button("Profile", key="profile_btn"):
                 st.session_state.current_page = "profile"
                 st.rerun()
                 
             # Show M-Pesa simulator button
-            if st.button("M-Pesa Simulator", key="mpesa_simulator_btn", help="Test M-Pesa API integration"):
+            if st.button("M-Pesa Simulator", key="mpesa_simulator_btn"):
                 st.session_state.current_page = "mpesa_simulator"
                 st.rerun()
-                
-            st.markdown('</div>', unsafe_allow_html=True)
             
-            # Add styling for the logout button
-            st.markdown('<div class="logout-button">', unsafe_allow_html=True)
             # Show logout button
-            if st.button("Logout", key="logout_btn", help="Sign out of your account"):
+            if st.button("Logout", key="logout_btn"):
                 # Clear session state and go back to landing
                 for key in list(st.session_state.keys()):
                     if key != "current_page":
@@ -117,51 +67,24 @@ def main():
                 
                 st.session_state.current_page = "landing"
                 st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            st.markdown("---")
-            
         else:
-            # Add styling for the buttons
-            st.markdown("""
-            <style>
-            .stButton>button {
-                background-color: #1E88E5;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                padding: 8px 16px;
-                width: 100%;
-                margin-bottom: 8px;
-                transition: all 0.3s ease;
-            }
-            .stButton>button:hover {
-                background-color: #1565C0;
-                transform: translateY(-2px);
-                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            }
-            .register-button>button {
-                background-color: #66bb6a;
-            }
-            .register-button>button:hover {
-                background-color: #43a047;
-            }
-            </style>
-            """, unsafe_allow_html=True)
-            
-            # Only show login/register buttons if not logged in
-            st.write("### Get Started")
-            
-            if st.button("Login", key="login_btn", help="Log in to your account"):
-                st.session_state.current_page = "login"
+            # Show home button
+            if st.button("Home", key="home_btn"):
+                st.session_state.current_page = "landing"
                 st.rerun()
                 
-            # Use a div with a specific class for different styling
-            st.markdown('<div class="register-button">', unsafe_allow_html=True)
-            if st.button("Register", key="register_btn", help="Create a new account"):
-                st.session_state.current_page = "register"
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
+            # Only show login/register buttons if not logged in
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                if st.button("Login", key="login_btn"):
+                    st.session_state.current_page = "login"
+                    st.rerun()
+            
+            with col2:
+                if st.button("Register", key="register_btn"):
+                    st.session_state.current_page = "register"
+                    st.rerun()
     
     # Handle page routing
     if st.session_state.current_page == "dashboard":
