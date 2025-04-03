@@ -197,17 +197,11 @@ def app():
     col1, col2 = st.columns([2, 1])
     with col1:
         st.write("# Eropia umkhondo")
-    with col2:
-        # Check if user is logged in
-        if "username" in st.session_state:
-            # Show logout button
-            if st.button("Logout", key="nav_logout", use_container_width=True):
-                # Clear session state and go back to landing
-                for key in list(st.session_state.keys()):
-                    if key != "current_page":
-                        del st.session_state[key]
-                st.rerun()
-        else:
+    
+    # Only show top navigation buttons for non-logged-in users
+    # Logged-in users will use the sidebar navigation
+    if "username" not in st.session_state:
+        with col2:
             # Show login/register buttons if not logged in
             cols = st.columns(2)
             with cols[0]:
