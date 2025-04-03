@@ -4,7 +4,6 @@ import pages.login as login_page
 import pages.register as register_page
 import pages.dashboard as dashboard_page
 import pages.landing as landing_page
-import pages.budget as budget_page
 
 # Set page configuration
 st.set_page_config(
@@ -33,13 +32,6 @@ def main():
             if st.button("Dashboard", key="dashboard_btn"):
                 st.session_state.current_page = "dashboard"
                 st.rerun()
-                
-            # Show budget planner button
-            if st.button("Budget Planner", key="budget_btn"):
-                st.session_state.current_page = "budget"
-                st.rerun()
-            
-            st.markdown("---")  # Divider
             
             # Show logout button
             if st.button("Logout", key="logout_btn"):
@@ -71,14 +63,9 @@ def main():
     
     # Handle page routing
     if "username" in st.session_state:
-        # If user is logged in, route to appropriate page
-        if st.session_state.current_page == "dashboard":
-            dashboard_page.app()
-        elif st.session_state.current_page == "budget":
-            budget_page.app()
-        else:
-            # Default to dashboard for authenticated users
-            dashboard_page.app()
+        # If user is logged in, only show dashboard regardless of current_page
+        # This ensures login/register are completely hidden
+        dashboard_page.app()
     else:
         # Only if user is not logged in, show landing/login/register pages
         if st.session_state.current_page == "landing":
