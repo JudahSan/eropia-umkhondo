@@ -249,12 +249,22 @@ def app():
     """, unsafe_allow_html=True)
     
     # CTA Section
-    st.markdown("""
-    <div class="cta-container">
-        <h2 class="cta-title">Start Your Financial Journey Today</h2>
-        <p class="cta-text">Join thousands of users who have taken control of their finances with Eropia umkhondo. It's free to start!</p>
-    </div>
-    """, unsafe_allow_html=True)
+    if "username" in st.session_state:
+        # Different CTA for logged-in users
+        st.markdown("""
+        <div class="cta-container">
+            <h2 class="cta-title">Continue Your Financial Journey</h2>
+            <p class="cta-text">Welcome back! Ready to check your latest transactions and financial insights?</p>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        # Original CTA for non-logged-in users
+        st.markdown("""
+        <div class="cta-container">
+            <h2 class="cta-title">Start Your Financial Journey Today</h2>
+            <p class="cta-text">Join thousands of users who have taken control of their finances with Eropia umkhondo. It's free to start!</p>
+        </div>
+        """, unsafe_allow_html=True)
     
     # CTA Buttons
     col1, col2, col3 = st.columns([1, 2, 1])
