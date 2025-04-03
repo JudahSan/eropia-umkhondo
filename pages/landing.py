@@ -1,4 +1,5 @@
 import streamlit as st
+from financial_tips import get_general_tip, get_tips_by_category
 
 def app():
     # Custom CSS for better styling of the landing page
@@ -286,6 +287,73 @@ def app():
                 if st.button("Login", key="cta_login_btn", use_container_width=True):
                     st.session_state.current_page = "login"
                     st.rerun()
+    
+    # Financial Tip Section
+    # Get financial tips
+    general_tip = get_general_tip()
+    budget_tip = get_tips_by_category("budgeting", 1)[0]
+    saving_tip = get_tips_by_category("saving", 1)[0]
+    
+    # Financial tips style
+    st.markdown("""
+    <style>
+    .tip-card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin: 2rem 0;
+    }
+    
+    .tip-card {
+        background-color: #f0f8ff;
+        border-radius: 10px;
+        padding: 20px;
+        border-left: 5px solid #4682b4;
+        margin: 10px 0;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        max-width: 350px;
+        flex: 1 1 300px;
+    }
+    
+    .tip-header {
+        color: #4682b4;
+        margin-top: 0;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+    
+    .tip-content {
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #2c3e50;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Financial tips content
+    st.markdown(f"""
+    <div class="context-section">
+        <h3 class="context-title">Financial Tips</h3>
+        
+        <div class="tip-card-container">
+            <div class="tip-card">
+                <h4 class="tip-header">Daily Tip</h4>
+                <p class="tip-content">{general_tip}</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4 class="tip-header">Budgeting Tip</h4>
+                <p class="tip-content">{budget_tip}</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4 class="tip-header">Saving Tip</h4>
+                <p class="tip-content">{saving_tip}</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Cultural Context Section
     st.markdown("""

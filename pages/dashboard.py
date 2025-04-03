@@ -11,6 +11,7 @@ from visualization import (
 import os
 from mpesa_api import MPesaAPI
 from typing import List, Dict, Any, Union, Optional
+from tip_widget import display_tip_widget, tip_widget_button
 
 def app():
     # Custom CSS for better mobile responsiveness
@@ -100,6 +101,13 @@ def app():
     
     # Get all transactions
     transactions_df = data_manager.get_transactions()
+    
+    # Add the tip widget button in the sidebar
+    with st.sidebar:
+        tip_widget_button(location="sidebar")
+    
+    # Display the financial tips popup widget if it's toggled on
+    display_tip_widget(transactions_df)
     
     # Add Transaction section
     st.subheader("Add Transaction")
