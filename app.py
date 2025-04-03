@@ -18,29 +18,49 @@ if "current_page" not in st.session_state:
 
 # Define our app navigation structure
 def main():
+    # Set up sidebar navigation
+    with st.sidebar:
+        st.title("Finance Tracker")
+        st.image("generated-icon.png", width=80)
+        
+        # Check if user is logged in
+        if "username" in st.session_state:
+            st.write(f"Logged in as: {st.session_state.username}")
+            
+            # Show dashboard button
+            if st.button("Dashboard", key="dashboard_btn"):
+                st.session_state.current_page = "dashboard"
+                st.rerun()
+            
+            # Show logout button
+            if st.button("Logout", key="logout_btn"):
+                # Clear session state and go back to login
+                for key in list(st.session_state.keys()):
+                    if key != "current_page":
+                        del st.session_state[key]
+                
+                st.session_state.current_page = "login"
+                st.rerun()
+        else:
+            # Only show login/register buttons if not logged in
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                if st.button("Login", key="login_btn"):
+                    st.session_state.current_page = "login"
+                    st.rerun()
+            
+            with col2:
+                if st.button("Register", key="register_btn"):
+                    st.session_state.current_page = "register"
+                    st.rerun()
+    
     # Handle page routing
     if st.session_state.current_page == "login":
         login_page.app()
     elif st.session_state.current_page == "register":
         register_page.app()
     elif st.session_state.current_page == "dashboard":
-        # Display logout in the sidebar
-        with st.sidebar:
-            st.title("Finance Tracker")
-            st.image("generated-icon.png", width=80)
-            
-            if "username" in st.session_state:
-                st.write(f"Logged in as: {st.session_state.username}")
-                
-                if st.button("Logout"):
-                    # Clear session state and go back to login
-                    for key in list(st.session_state.keys()):
-                        if key != "current_page":
-                            del st.session_state[key]
-                    
-                    st.session_state.current_page = "login"
-                    st.rerun()
-        
         # Show the dashboard content
         dashboard_page.app()
     else:

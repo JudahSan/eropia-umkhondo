@@ -8,6 +8,8 @@ from visualization import (
     plot_spending_trend,
     plot_income_vs_expense
 )
+import os
+from mpesa_api import MPesaAPI
 
 def app():
     if "username" not in st.session_state:
@@ -27,8 +29,109 @@ def app():
     # Get all transactions
     transactions_df = data_manager.get_transactions()
     
+    # Add Transaction section
+    st.subheader("Add Transaction")
+    
+    with st.expander("Add Manual Transaction"):
+        with st.form("add_transaction_form"):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                transaction_date = st.date_input("Date", value=datetime.now())
+                description = st.text_input("Description")
+                amount = st.number_input("Amount (KSh)", min_value=0.0, step=100.0)
+            
+            with col2:
+                transaction_type = st.selectbox("Type", ["expense", "income"])
+                category_options = ["Food", "Transport", "Housing", "Entertainment", "Utilities", 
+                                   "Healthcare", "Education", "Shopping", "Salary", "Investment", 
+                                   "Gift", "Other"]
+                category = st.selectbox("Category", category_options)
+            
+            submitted = st.form_submit_button("Add Transaction")
+            
+            if submitted:
+                new_transaction = {
+                    "date": transaction_date,
+                    "description": description,
+                    "amount": float(amount),
+                    "type": transaction_type,
+                    "category": category
+                }
+                
+                success = data_manager.add_transaction(new_transaction)
+                
+                if success:
+                    st.success("Transaction added successfully!")
+                    # Refresh the page to show the new transaction
+                    st.rerun()
+                else:
+                    st.error("Failed to add transaction. Please try again.")
+    
+    # M-Pesa Integration Section
+    with st.expander("Import M-Pesa Transactions"):
+        st.write("Import your M-Pesa transactions directly from Safaricom.")
+        
+        # Check if M-Pesa API credentials are set
+        mpesa_credentials_set = os.getenv("MPESA_CONSUMER_KEY") and os.getenv("MPESA_CONSUMER_SECRET")
+        
+        if not mpesa_credentials_set:
+            st.warning("""
+            M-Pesa API credentials not set. To use this feature, you need to set the following environment variables:
+            
+            - MPESA_CONSUMER_KEY: Your M-Pesa API consumer key
+            - MPESA_CONSUMER_SECRET: Your M-Pesa API consumer secret
+            - MPESA_API_URL (optional): API URL (defaults to sandbox)
+            
+            Contact your administrator to set up these credentials.
+            """)
+        else:
+            from auth_manager import AuthManager
+            auth_manager = AuthManager()
+            mpesa_api = MPesaAPI(username=username, auth_manager=auth_manager)
+            
+            with st.form("import_mpesa_form"):
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    import_start_date = st.date_input("Start Date", value=datetime.now() - timedelta(days=30))
+                with col2:
+                    import_end_date = st.date_input("End Date", value=datetime.now())
+                
+                import_submitted = st.form_submit_button("Import Transactions")
+                
+                if import_submitted:
+                    try:
+                        # Get user's phone number
+                        phone_number = auth_manager.get_user_phone_number(username)
+                        
+                        if not phone_number:
+                            st.error("Phone number not found in your profile. Please update your profile with a valid phone number.")
+                        else:
+                            with st.spinner("Fetching M-Pesa transactions..."):
+                                # This would call the M-Pesa API in a real implementation
+                                transactions = mpesa_api.get_transactions(phone_number, import_start_date, import_end_date)
+                                
+                                # Add the transactions to the data store
+                                if transactions:
+                                    success_count = 0
+                                    for transaction in transactions:
+                                        if data_manager.add_transaction(transaction):
+                                            success_count += 1
+                                    
+                                    st.success(f"Successfully imported {success_count} transactions!")
+                                    st.rerun()
+                                else:
+                                    st.info("No transactions found for the selected date range.")
+                    except ValueError as e:
+                        st.error(str(e))
+                    except Exception as e:
+                        st.error(f"An error occurred: {str(e)}")
+    
+    st.write("---")
+    
     if transactions_df.empty:
-        st.info("No transactions found. Add some transactions to see your financial insights.")
+        st.info("No transactions found. Add some transactions above to see your financial insights.")
         return
 
     # Dashboard metrics

@@ -107,8 +107,11 @@ class MPesaAPI:
         # Simulate API unavailable or error
         # In a real implementation, replace this with actual API call
         raise ValueError(
-            "Unable to connect to M-Pesa API. Please ensure you have the correct credentials "
-            "and that the M-Pesa API is available. Contact support if the issue persists."
+            "Unable to connect to M-Pesa API. Please ensure you have set the following environment variables:\n\n"
+            "1. MPESA_CONSUMER_KEY: Your M-Pesa API consumer key from the Safaricom Developer Portal\n"
+            "2. MPESA_CONSUMER_SECRET: Your M-Pesa API consumer secret from the Safaricom Developer Portal\n"
+            "3. MPESA_API_URL (optional): The M-Pesa API URL (defaults to sandbox)\n\n"
+            "You can obtain these credentials by registering on the Safaricom Developer Portal at https://developer.safaricom.co.ke/"
         )
         
         # The code below would never execute in this simulation
