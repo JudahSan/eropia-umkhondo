@@ -1,5 +1,6 @@
 import streamlit as st
 from financial_tips import get_general_tip, get_tips_by_category
+from tip_widget import tip_widget_button, display_tip_widget
 
 def app():
     # Custom CSS for better styling of the landing page
@@ -289,71 +290,46 @@ def app():
                     st.rerun()
     
     # Financial Tip Section
-    # Get financial tips
+    st.markdown("""
+    <div class="context-section">
+        <h3 class="context-title">Financial Tips</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Display static financial tips first
     general_tip = get_general_tip()
     budget_tip = get_tips_by_category("budgeting", 1)[0]
     saving_tip = get_tips_by_category("saving", 1)[0]
     
-    # Financial tips style
+    # Create columns for the tips
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.info("**Daily Tip**\n\n" + general_tip)
+    
+    with col2:
+        st.info("**Budgeting Tip**\n\n" + budget_tip)
+    
+    with col3:
+        st.info("**Saving Tip**\n\n" + saving_tip)
+    
+    # Add a divider
+    st.markdown("<hr style='margin: 2rem 0; border-top: 1px solid #eee;'>", unsafe_allow_html=True)
+    
+    # Add a container for the interactive tip widget button
     st.markdown("""
-    <style>
-    .tip-card-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-        margin: 2rem 0;
-    }
-    
-    .tip-card {
-        background-color: #f0f8ff;
-        border-radius: 10px;
-        padding: 20px;
-        border-left: 5px solid #4682b4;
-        margin: 10px 0;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        max-width: 350px;
-        flex: 1 1 300px;
-    }
-    
-    .tip-header {
-        color: #4682b4;
-        margin-top: 0;
-        font-weight: bold;
-        font-size: 1.2rem;
-    }
-    
-    .tip-content {
-        font-size: 1rem;
-        line-height: 1.5;
-        color: #2c3e50;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # Financial tips content
-    st.markdown(f"""
-    <div class="context-section">
-        <h3 class="context-title">Financial Tips</h3>
-        
-        <div class="tip-card-container">
-            <div class="tip-card">
-                <h4 class="tip-header">Daily Tip</h4>
-                <p class="tip-content">{general_tip}</p>
-            </div>
-            
-            <div class="tip-card">
-                <h4 class="tip-header">Budgeting Tip</h4>
-                <p class="tip-content">{budget_tip}</p>
-            </div>
-            
-            <div class="tip-card">
-                <h4 class="tip-header">Saving Tip</h4>
-                <p class="tip-content">{saving_tip}</p>
-            </div>
-        </div>
+    <div style="text-align: center; margin: 1.5rem 0;">
+        <p style="font-size: 1.1rem; color: #4B5563;">Want more personalized financial tips? Create an account to get tips based on your spending patterns!</p>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Add the interactive tip widget in the center
+    col1, col2, col3 = st.columns([2, 2, 2])
+    with col2:
+        tip_widget_button(location="main")
+    
+    # Display the financial tips popup widget if it's toggled on
+    display_tip_widget()
     
     # Cultural Context Section
     st.markdown("""

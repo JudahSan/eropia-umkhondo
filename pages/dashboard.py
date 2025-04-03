@@ -166,6 +166,7 @@ def app():
     # M-Pesa Integration Section
     with transaction_tab2:
         st.write("Import your M-Pesa transactions directly from Safaricom.")
+        st.info("Note: This is a demo version using sample M-Pesa transactions. In production, this would connect to the actual M-Pesa API.")
         
         # Check if M-Pesa API credentials are set
         mpesa_credentials_set = os.getenv("MPESA_CONSUMER_KEY") and os.getenv("MPESA_CONSUMER_SECRET")
