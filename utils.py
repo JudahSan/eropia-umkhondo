@@ -100,6 +100,8 @@ def parse_mpesa_statement(statement_text):
     Returns:
         list: List of transaction dictionaries
     """
+    from datetime import datetime
+    
     transactions = []
     
     # Regular expression to match M-Pesa transaction patterns

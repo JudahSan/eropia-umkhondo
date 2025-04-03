@@ -4,6 +4,10 @@ import json
 import os
 import time
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
+# Load environment variables from .env file if present
+load_dotenv()
 
 class MPesaAPI:
     """Class to interact with the M-Pesa API for transaction data"""
