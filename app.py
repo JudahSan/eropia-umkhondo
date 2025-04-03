@@ -3,10 +3,11 @@ from auth_manager import AuthManager
 import pages.login as login_page
 import pages.register as register_page
 import pages.dashboard as dashboard_page
+import pages.landing as landing_page
 
 # Set page configuration
 st.set_page_config(
-    page_title="Personal Finance Tracker",
+    page_title="Eropia umkhondo - Money Tracker",
     page_icon="💰",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -14,13 +15,13 @@ st.set_page_config(
 
 # Initialize session state for current page if not set
 if "current_page" not in st.session_state:
-    st.session_state.current_page = "login"
+    st.session_state.current_page = "landing"
 
 # Define our app navigation structure
 def main():
     # Set up sidebar navigation
     with st.sidebar:
-        st.title("Finance Tracker")
+        st.title("Eropia umkhondo")
         st.image("generated-icon.png", width=80)
         
         # Check if user is logged in
@@ -34,14 +35,19 @@ def main():
             
             # Show logout button
             if st.button("Logout", key="logout_btn"):
-                # Clear session state and go back to login
+                # Clear session state and go back to landing
                 for key in list(st.session_state.keys()):
                     if key != "current_page":
                         del st.session_state[key]
                 
-                st.session_state.current_page = "login"
+                st.session_state.current_page = "landing"
                 st.rerun()
         else:
+            # Show home button
+            if st.button("Home", key="home_btn"):
+                st.session_state.current_page = "landing"
+                st.rerun()
+                
             # Only show login/register buttons if not logged in
             col1, col2 = st.columns(2)
             
@@ -61,14 +67,16 @@ def main():
         # This ensures login/register are completely hidden
         dashboard_page.app()
     else:
-        # Only if user is not logged in, show login/register pages
-        if st.session_state.current_page == "login":
+        # Only if user is not logged in, show landing/login/register pages
+        if st.session_state.current_page == "landing":
+            landing_page.app()
+        elif st.session_state.current_page == "login":
             login_page.app()
         elif st.session_state.current_page == "register":
             register_page.app()
         else:
-            # Default to login if an invalid page is somehow set
-            st.session_state.current_page = "login"
+            # Default to landing if an invalid page is somehow set
+            st.session_state.current_page = "landing"
             st.rerun()
 
 if __name__ == "__main__":
