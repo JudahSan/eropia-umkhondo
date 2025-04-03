@@ -194,15 +194,26 @@ def app():
     with col1:
         st.write("# Eropia umkhondo")
     with col2:
-        cols = st.columns(2)
-        with cols[0]:
-            if st.button("Login", key="nav_login", use_container_width=True):
-                st.session_state.current_page = "login"
+        # Check if user is logged in
+        if "username" in st.session_state:
+            # Show logout button
+            if st.button("Logout", key="nav_logout", use_container_width=True):
+                # Clear session state and go back to landing
+                for key in list(st.session_state.keys()):
+                    if key != "current_page":
+                        del st.session_state[key]
                 st.rerun()
-        with cols[1]:
-            if st.button("Register", key="nav_register", use_container_width=True):
-                st.session_state.current_page = "register"
-                st.rerun()
+        else:
+            # Show login/register buttons if not logged in
+            cols = st.columns(2)
+            with cols[0]:
+                if st.button("Login", key="nav_login", use_container_width=True):
+                    st.session_state.current_page = "login"
+                    st.rerun()
+            with cols[1]:
+                if st.button("Register", key="nav_register", use_container_width=True):
+                    st.session_state.current_page = "register"
+                    st.rerun()
     
     # Hero Section
     st.markdown("""
@@ -248,15 +259,23 @@ def app():
     # CTA Buttons
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        col_left, col_right = st.columns(2)
-        with col_left:
-            if st.button("Create Account", key="cta_create_account_btn", use_container_width=True):
-                st.session_state.current_page = "register"
+        # Check if user is logged in
+        if "username" in st.session_state:
+            # Show dashboard button
+            if st.button("Go to Dashboard", key="cta_dashboard_btn", use_container_width=True):
+                st.session_state.current_page = "dashboard"
                 st.rerun()
-        with col_right:
-            if st.button("Login", key="cta_login_btn", use_container_width=True):
-                st.session_state.current_page = "login"
-                st.rerun()
+        else:
+            # Show login/register buttons if not logged in
+            col_left, col_right = st.columns(2)
+            with col_left:
+                if st.button("Create Account", key="cta_create_account_btn", use_container_width=True):
+                    st.session_state.current_page = "register"
+                    st.rerun()
+            with col_right:
+                if st.button("Login", key="cta_login_btn", use_container_width=True):
+                    st.session_state.current_page = "login"
+                    st.rerun()
     
     # Cultural Context Section
     st.markdown("""
