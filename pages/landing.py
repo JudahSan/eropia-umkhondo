@@ -6,10 +6,12 @@ def app():
     # Custom CSS for better styling of the landing page
     st.markdown("""
     <style>
-    /* Hide sidebar completely */
+    /* Only hide sidebar for non-logged in users */
+    """+("" if "username" in st.session_state else """
     [data-testid="stSidebar"] {
         display: none;
     }
+    """)+"""
     
     /* Main container styling */
     .block-container {
@@ -273,8 +275,10 @@ def app():
     with col2:
         # Check if user is logged in
         if "username" in st.session_state:
-            # Show dashboard button
-            if st.button("Go to Dashboard", key="cta_dashboard_btn", use_container_width=True):
+            # Show dashboard button with debug message
+            dashboard_btn = st.button("Go to Dashboard", key="cta_dashboard_btn", use_container_width=True)
+            if dashboard_btn:
+                st.info("Redirecting to dashboard...")
                 st.session_state.current_page = "dashboard"
                 st.rerun()
         else:

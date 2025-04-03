@@ -21,10 +21,23 @@ if "current_page" not in st.session_state:
 
 # Define our app navigation structure
 def main():
+    # Debug info to see the state of the session
+    if st.session_state.get("debug", False):
+        st.write("Debug Information:")
+        st.write(f"Current Page: {st.session_state.get('current_page', 'None')}")
+        st.write(f"Username: {st.session_state.get('username', 'Not logged in')}")
+        st.write(f"Authentication Status: {'Logged in' if 'username' in st.session_state else 'Not logged in'}")
+    
     # Set up sidebar navigation
     with st.sidebar:
         st.title("Eropia umkhondo")
         st.image("generated-icon.png", width=80)
+        
+        # Add debug toggle in sidebar
+        if st.checkbox("Show Debug Info", value=st.session_state.get("debug", False)):
+            st.session_state.debug = True
+        else:
+            st.session_state.debug = False
         
         # Check if user is logged in
         if "username" in st.session_state:
