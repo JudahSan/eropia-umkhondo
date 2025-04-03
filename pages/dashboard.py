@@ -207,8 +207,23 @@ def app():
     
     if transactions_df.empty:
         st.info("No transactions found. Add some transactions above to see your financial insights.")
+        # Add budget planner link even if no transactions
+        col1, col2 = st.columns([3, 1])
+        with col2:
+            if st.button("📊 Budget Planner", key="go_to_budget_btn_empty", help="Go to Budget Planner"):
+                st.session_state.current_page = "budget"
+                st.rerun()
         return
 
+    # Financial Overview Section with Budget Link
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.subheader("Financial Overview")
+    with col2:
+        if st.button("📊 Budget Planner", key="go_to_budget_btn", help="Go to Budget Planner"):
+            st.session_state.current_page = "budget"
+            st.rerun()
+    
     # Dashboard metrics - make more mobile friendly
     # Use different column ratios for better mobile display
     col1, col2, col3 = st.columns([1, 1, 1])

@@ -18,3 +18,5 @@ echo "--- Data Manager Tests ---"
 python -m pytest -v tests/test_data_manager.py
 echo "--- M-Pesa Parser Tests ---"
 python -m pytest -v tests/test_mpesa_parser.py
+echo "--- Budget Manager Tests ---"
+python -m pytest -v tests/test_budget_manager.py
