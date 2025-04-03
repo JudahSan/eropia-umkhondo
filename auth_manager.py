@@ -40,7 +40,8 @@ class AuthManager:
     def _create_default_config(self):
         """Create a default configuration file with a demo user"""
         # Generate password for demo user
-        hashed_password = stauth.Hasher(['password']).generate()[0]
+        hasher = stauth.Hasher()
+        hashed_password = hasher.hash('password')
         
         # Default configuration with a demo user
         default_config = {
@@ -83,7 +84,7 @@ class AuthManager:
             self.credentials['preauthorized']['emails']
         )
         
-        # Get authentication status - using 'main' (form displayed in the main area)
+        # Get authentication status - using 'main' location for v0.2.2
         name, authentication_status, username = authenticator.login('Login', 'main')
         
         return authenticator, authentication_status, username
@@ -105,7 +106,7 @@ class AuthManager:
         if username in self.credentials['credentials']['usernames']:
             return False
             
-        # Hash the password
+        # Hash the password - for v0.2.2, Hasher takes a list of passwords
         hashed_password = stauth.Hasher([password]).generate()[0]
         
         # Add user to credentials
@@ -170,7 +171,7 @@ class AuthManager:
         if username not in self.credentials['credentials']['usernames']:
             return False
             
-        # Hash the new password
+        # Hash the new password - for v0.2.2, Hasher takes a list of passwords
         hashed_password = stauth.Hasher([new_password]).generate()[0]
         
         # Update password
