@@ -4,6 +4,7 @@ import pages.login as login_page
 import pages.register as register_page
 import pages.dashboard as dashboard_page
 import pages.landing as landing_page
+import pages.profile as profile_page
 
 # Set page configuration
 st.set_page_config(
@@ -31,6 +32,11 @@ def main():
             # Show dashboard button
             if st.button("Dashboard", key="dashboard_btn"):
                 st.session_state.current_page = "dashboard"
+                st.rerun()
+            
+            # Show profile button
+            if st.button("Profile", key="profile_btn"):
+                st.session_state.current_page = "profile"
                 st.rerun()
             
             # Show logout button
@@ -65,6 +71,9 @@ def main():
     if st.session_state.current_page == "dashboard":
         # Always show dashboard when that page is selected
         dashboard_page.app()
+    elif st.session_state.current_page == "profile" and "username" in st.session_state:
+        # Show profile page for logged in users
+        profile_page.app()
     elif st.session_state.current_page == "landing":
         # Show landing page regardless of login status
         landing_page.app()

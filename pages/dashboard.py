@@ -92,8 +92,16 @@ def app():
     
     username = st.session_state.username
     
-    st.title(f"Financial Dashboard")
-    st.caption(f"Welcome, {username}")
+    # Title and user info with profile link
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.title(f"Financial Dashboard")
+        st.caption(f"Welcome, {username}")
+    with col2:
+        # Add profile link at the top right
+        if st.button("📝 Edit Profile", key="top_profile_btn", help="Update your profile information"):
+            st.session_state.current_page = "profile"
+            st.rerun()
     
     # Initialize the data manager with the user's data
     data_manager = DataManager(username=username)
@@ -189,7 +197,13 @@ def app():
                         phone_number = auth_manager.get_user_phone_number(username)
                         
                         if not phone_number:
-                            st.error("Phone number not found in your profile. Please update your profile with a valid phone number.")
+                            st.error("Phone number not found in your profile.")
+                            st.info("To add your phone number, click on the 'Profile' button in the sidebar or the 'Edit Profile' button at the top of this page.")
+                            
+                            # Add a direct link to the profile page
+                            if st.button("Go to Profile", key="mpesa_profile_btn"):
+                                st.session_state.current_page = "profile"
+                                st.rerun()
                         else:
                             with st.spinner("Fetching M-Pesa transactions..."):
                                 # This would call the M-Pesa API in a real implementation
