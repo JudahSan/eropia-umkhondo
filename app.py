@@ -5,6 +5,7 @@ import pages.register as register_page
 import pages.dashboard as dashboard_page
 import pages.landing as landing_page
 import pages.profile as profile_page
+import pages.mpesa_simulator as mpesa_simulator_page
 
 # Set page configuration
 st.set_page_config(
@@ -37,6 +38,11 @@ def main():
             # Show profile button
             if st.button("Profile", key="profile_btn"):
                 st.session_state.current_page = "profile"
+                st.rerun()
+                
+            # Show M-Pesa simulator button
+            if st.button("M-Pesa Simulator", key="mpesa_simulator_btn"):
+                st.session_state.current_page = "mpesa_simulator"
                 st.rerun()
             
             # Show logout button
@@ -74,6 +80,9 @@ def main():
     elif st.session_state.current_page == "profile" and "username" in st.session_state:
         # Show profile page for logged in users
         profile_page.app()
+    elif st.session_state.current_page == "mpesa_simulator" and "username" in st.session_state:
+        # Show M-Pesa simulator page for logged in users
+        mpesa_simulator_page.app()
     elif st.session_state.current_page == "landing":
         # Show landing page regardless of login status
         landing_page.app()

@@ -196,6 +196,7 @@ def display_tip_widget(transactions_df=None):
             is_contextual = transactions_df is not None and not transactions_df.empty
             contextual_badge = """<span style="background-color: #4682b4; color: white; padding: 3px 8px; border-radius: 10px; font-size: 0.7em; margin-left: 10px;">Personalized</span>""" if is_contextual else ""
             
+            # Apply CSS for the tip widget
             st.markdown("""
             <style>
             .tip-container {
@@ -250,6 +251,10 @@ def display_tip_widget(transactions_df=None):
                 text-align: right;
             }
             </style>
+            """, unsafe_allow_html=True)
+            
+            # Create the tip content HTML
+            tip_html = f"""
             <div class="tip-container">
                 <div class="tip-header">
                     <h3 class="tip-title">
@@ -257,18 +262,14 @@ def display_tip_widget(transactions_df=None):
                     </h3>
                 </div>
                 <p class="tip-content">
-                    {tip}
+                    {tip_content}
                 </p>
                 <p class="tip-footer">
-                    Tip {current_index}/{total_tips}
+                    Tip {st.session_state.current_tip_index + 1}/{len(st.session_state.contextual_tips) if st.session_state.contextual_tips else 1}
                 </p>
             </div>
-            """.format(
-                tip=tip_content,
-                contextual_badge=contextual_badge,
-                current_index=st.session_state.current_tip_index + 1,
-                total_tips=len(st.session_state.contextual_tips) if st.session_state.contextual_tips else 1
-            ), unsafe_allow_html=True)
+            """
+            st.markdown(tip_html, unsafe_allow_html=True)
             
             # Improved navigation buttons with tooltips
             if len(st.session_state.contextual_tips) > 1:

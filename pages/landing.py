@@ -292,41 +292,78 @@ def app():
     # Financial Tip Section
     st.markdown("""
     <div class="context-section">
-        <h3 class="context-title">Financial Tips</h3>
+        <h3 class="context-title">Interactive Financial Tips</h3>
+        <p style="text-align: center; font-size: 1.1rem; color: #4B5563; margin-bottom: 1.5rem;">
+            Discover personalized financial advice to improve your money management skills
+        </p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Display static financial tips first
-    general_tip = get_general_tip()
-    budget_tip = get_tips_by_category("budgeting", 1)[0]
-    saving_tip = get_tips_by_category("saving", 1)[0]
-    
-    # Create columns for the tips
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.info("**Daily Tip**\n\n" + general_tip)
-    
-    with col2:
-        st.info("**Budgeting Tip**\n\n" + budget_tip)
-    
-    with col3:
-        st.info("**Saving Tip**\n\n" + saving_tip)
-    
-    # Add a divider
-    st.markdown("<hr style='margin: 2rem 0; border-top: 1px solid #eee;'>", unsafe_allow_html=True)
-    
-    # Add a container for the interactive tip widget button
+    # Create a container for the tips widget with custom styling
     st.markdown("""
-    <div style="text-align: center; margin: 1.5rem 0;">
-        <p style="font-size: 1.1rem; color: #4B5563;">Want more personalized financial tips? Create an account to get tips based on your spending patterns!</p>
-    </div>
+    <style>
+    .tips-container {
+        background-color: #f8f9fa;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        margin: 20px 0;
+        border: 1px solid #e0e5ec;
+    }
+    .tips-container h4 {
+        color: #1E3A8A;
+        margin-bottom: 20px;
+        font-size: 1.4rem;
+        text-align: center;
+    }
+    </style>
+    <div class="tips-container">
     """, unsafe_allow_html=True)
     
-    # Add the interactive tip widget in the center
-    col1, col2, col3 = st.columns([2, 2, 2])
+    # Add helpful text based on login status
+    if "username" in st.session_state:
+        st.markdown("""
+        <p style="text-align: center; margin-bottom: 20px; font-size: 1.1rem;">
+            Your personal financial tips are based on your transaction history and spending patterns.
+        </p>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <p style="text-align: center; margin-bottom: 20px; font-size: 1.1rem;">
+            Create an account to receive personalized tips based on your financial behavior.
+        </p>
+        """, unsafe_allow_html=True)
+    
+    # Center the tip widget button
+    col1, col2, col3 = st.columns([2, 3, 2])
     with col2:
+        # Use custom styling for the button to make it more prominent
+        st.markdown("""
+        <style>
+        [data-testid="stButton"] button {
+            background-color: #1E88E5;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        [data-testid="stButton"] button:hover {
+            background-color: #1565C0;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Display the interactive tip widget button
         tip_widget_button(location="main")
+    
+    # Close the container div
+    st.markdown("</div>", unsafe_allow_html=True)
     
     # Display the financial tips popup widget if it's toggled on
     display_tip_widget()
