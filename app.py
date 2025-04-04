@@ -43,20 +43,20 @@ def main():
         if "username" in st.session_state:
             st.write(f"Logged in as: {st.session_state.username}")
             
-            # Show dashboard button
-            if st.button("Dashboard", key="dashboard_btn"):
-                st.session_state.current_page = "dashboard"
-                st.rerun()
+            # # Show dashboard button
+            # if st.button("Dashboard", key="dashboard_btn"):
+            #     st.session_state.current_page = "dashboard"
+            #     st.rerun()
             
-            # Show profile button
-            if st.button("Profile", key="profile_btn"):
-                st.session_state.current_page = "profile"
-                st.rerun()
+            # # Show profile button
+            # if st.button("Profile", key="profile_btn"):
+            #     st.session_state.current_page = "profile"
+            #     st.rerun()
                 
-            # Show M-Pesa simulator button
-            if st.button("M-Pesa Simulator", key="mpesa_simulator_btn"):
-                st.session_state.current_page = "mpesa_simulator"
-                st.rerun()
+            # # Show M-Pesa simulator button
+            # if st.button("M-Pesa Simulator", key="mpesa_simulator_btn"):
+            #     st.session_state.current_page = "mpesa_simulator"
+            #     st.rerun()
             
             # Show logout button
             if st.button("Logout", key="logout_btn"):

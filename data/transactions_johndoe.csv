@@ -9,3 +9,5 @@ date,description,amount,type,category,source,user_id
 2025-03-19,M-PESA Payment to Netflix,1100.0,expense,Entertainment,,johndoe
 2025-03-24,M-PESA Payment to Pharmacy,850.0,expense,Healthcare,,johndoe
 2025-03-29,M-PESA Payment to Landlord,18000.0,expense,Housing,,johndoe
+2025-04-04,Swimming,3333333.0,expense,Food,,johndoe
+2025-04-04,dsfaf,1111111.0,expense,Food,,johndoe

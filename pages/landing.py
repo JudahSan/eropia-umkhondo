@@ -2,6 +2,7 @@ import streamlit as st
 from financial_tips import get_general_tip, get_tips_by_category
 from tip_widget import tip_widget_button, display_tip_widget
 
+
 def app():
     # Custom CSS for better styling of the landing page
     st.markdown("""
@@ -48,6 +49,7 @@ def app():
         max-width: 800px;
         margin-left: auto;
         margin-right: auto;
+        text-align: center; /* Ensure subtitle is centered */
     }
     
     /* Feature section */
@@ -55,6 +57,7 @@ def app():
         padding: 3rem 1rem;
         max-width: 1200px;
         margin: 0 auto;
+        text-align: center; /* Center the feature section title */
     }
     
     .feature-grid {
@@ -71,6 +74,7 @@ def app():
         padding: 2rem;
         text-align: center;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 1rem;
     }
     
     .feature-card:hover {
@@ -160,6 +164,7 @@ def app():
     @media (max-width: 768px) {
         .hero-title {
             font-size: 2.8rem;
+            text-align: center;
         }
         
         .hero-subtitle {
@@ -180,7 +185,7 @@ def app():
     }
     </style>
     """, unsafe_allow_html=True)
-    
+
     # Hide the main menu and footer
     st.markdown(
         """
@@ -192,12 +197,12 @@ def app():
         """,
         unsafe_allow_html=True
     )
-    
+
     # Top Navigation
     col1, col2 = st.columns([2, 1])
     with col1:
         st.write("# Eropia umkhondo")
-    
+
     # Only show top navigation buttons for non-logged-in users
     # Logged-in users will use the sidebar navigation
     if "username" not in st.session_state:
@@ -212,40 +217,51 @@ def app():
                 if st.button("Register", key="nav_register", use_container_width=True):
                     st.session_state.current_page = "register"
                     st.rerun()
-    
+
     # Hero Section
     st.markdown("""
     <div class="hero-container">
-        <h1 class="hero-title">Eropia umkhondo</h1>
-        <p class="hero-subtitle">Track your money, build your future. A simple and powerful financial tracker combining personal and M-Pesa transactions.</p>
+        <h1 class="hero-title">Eropia Umkhondo</h1>
+        <p style="text-align: center; font-size: 1.1rem; margin-bottom: 1.5rem;">
+        Track your money, build your future. A simple and powerful financial tracker combining personal and M-Pesa transactions.</p>
     </div>
     """, unsafe_allow_html=True)
-    
+
     # Feature Section
     st.markdown("""
-    <div class="feature-section">
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3 class="feature-title">Visual Analytics</h3>
-                <p class="feature-text">See where your money goes with intuitive charts and reports that help you understand your spending habits.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <h3 class="feature-title">M-Pesa Integration</h3>
-                <p class="feature-text">Automatically import your M-Pesa transactions to keep track of all your mobile money activities.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">🔒</div>
-                <h3 class="feature-title">Secure & Private</h3>
-                <p class="feature-text">Your financial data stays private and secure. We use industry-standard security practices to protect your information.</p>
-            </div>
-        </div>
+    <div style="text-align: center;">
+        <h2>Features</h2>
     </div>
     """, unsafe_allow_html=True)
-    
+    features = [
+        {
+            "icon": "📊",
+            "title": "Visual Analytics",
+            "text": "See where your money goes with intuitive charts and reports that help you understand your spending habits."
+        },
+        {
+            "icon": "📱",
+            "title": "M-Pesa Integration",
+            "text": "Automatically import your M-Pesa transactions to keep track of all your mobile money activities."
+        },
+        {
+            "icon": "🔒",
+            "title": "Secure & Private",
+            "text": "Your financial data stays private and secure. We use industry-standard security practices to protect your information."
+        }
+    ]
+
+    cols = st.columns(len(features))
+    for col, feature in zip(cols, features):
+        with col:
+            st.markdown(f"""
+            <div class="feature-card">
+                <div class="feature-icon">{feature['icon']}</div>
+                <h3 class="feature-title">{feature['title']}</h3>
+                <p class="feature-text">{feature['text']}</p>
+            </div>
+            """, unsafe_allow_html=True)
+
     # CTA Section
     if "username" in st.session_state:
         # Different CTA for logged-in users
@@ -260,17 +276,20 @@ def app():
         st.markdown("""
         <div class="cta-container">
             <h2 class="cta-title">Start Your Financial Journey Today</h2>
-            <p class="cta-text">Join thousands of users who have taken control of their finances with Eropia umkhondo. It's free to start!</p>
+            <p style="text-align: center; font-size: 1.1rem; color: #4B5563; margin-bottom: 1.5rem;">
+            Join thousands of users who have taken control of their finances with Eropia umkhondo. It's free to start!
+            </p>
         </div>
         """, unsafe_allow_html=True)
-    
+
     # CTA Buttons
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         # Check if user is logged in
         if "username" in st.session_state:
             # Show dashboard button with debug message
-            dashboard_btn = st.button("Go to Dashboard", key="cta_dashboard_btn", use_container_width=True)
+            dashboard_btn = st.button(
+                "Go to Dashboard", key="cta_dashboard_btn", use_container_width=True)
             if dashboard_btn:
                 st.info("Redirecting to dashboard...")
                 st.session_state.current_page = "dashboard"
@@ -286,7 +305,7 @@ def app():
                 if st.button("Login", key="cta_login_btn", use_container_width=True):
                     st.session_state.current_page = "login"
                     st.rerun()
-    
+
     # Financial Tip Section
     st.markdown("""
     <div class="context-section">
@@ -296,7 +315,7 @@ def app():
         </p>
     </div>
     """, unsafe_allow_html=True)
-    
+
     # Create a container for the tips widget with custom styling
     st.markdown("""
     <style>
@@ -317,7 +336,7 @@ def app():
     </style>
     <div class="tips-container">
     """, unsafe_allow_html=True)
-    
+
     # Add helpful text based on login status
     if "username" in st.session_state:
         st.markdown("""
@@ -331,7 +350,7 @@ def app():
             Create an account to receive personalized tips based on your financial behavior.
         </p>
         """, unsafe_allow_html=True)
-    
+
     # Center the tip widget button
     col1, col2, col3 = st.columns([2, 3, 2])
     with col2:
@@ -356,16 +375,16 @@ def app():
         }
         </style>
         """, unsafe_allow_html=True)
-        
+
         # Display the interactive tip widget button
         tip_widget_button(location="main")
-    
+
     # Close the container div
     st.markdown("</div>", unsafe_allow_html=True)
-    
+
     # Display the financial tips popup widget if it's toggled on
     display_tip_widget()
-    
+
     # Cultural Context Section
     st.markdown("""
     <div class="context-section">
@@ -377,13 +396,14 @@ def app():
         </p>
     </div>
     """, unsafe_allow_html=True)
-    
+
     # Footer
     st.markdown("""
     <div class="footer-container">
         <p class="footer-text">© 2025 Eropia umkhondo - Your personal finance journey</p>
     </div>
     """, unsafe_allow_html=True)
+
 
 if __name__ == "__main__":
     app()

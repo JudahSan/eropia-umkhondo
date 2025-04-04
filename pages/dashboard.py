@@ -13,7 +13,9 @@ from mpesa_api import MPesaAPI
 from typing import List, Dict, Any, Union, Optional
 from tip_widget import display_tip_widget, tip_widget_button
 
+
 def app():
+ 
     # Custom CSS for better mobile responsiveness
     st.markdown("""
     <style>
@@ -98,6 +100,8 @@ def app():
         st.title(f"Financial Dashboard")
         st.caption(f"Welcome, {username}")
     with col2:
+        # Add some padding before the profile link button
+        st.markdown("<div style='padding-top: 100px;'></div>", unsafe_allow_html=True)
         # Add profile link at the top right
         if st.button("📝 Edit Profile", key="top_profile_btn", help="Update your profile information"):
             st.session_state.current_page = "profile"

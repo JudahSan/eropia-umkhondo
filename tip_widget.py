@@ -8,6 +8,7 @@ import streamlit as st
 from financial_tips import get_contextual_tips, get_tip_of_the_day
 import pandas as pd
 
+
 def initialize_tip_state():
     """Initialize session state variables for tip widget"""
     if "show_tip_widget" not in st.session_state:
@@ -21,47 +22,54 @@ def initialize_tip_state():
     if "tip_widget_initialized" not in st.session_state:
         st.session_state.tip_widget_initialized = False
 
+
 def toggle_tip_widget():
     """Toggle the visibility of the tip widget"""
     st.session_state.show_tip_widget = not st.session_state.show_tip_widget
 
+
 def next_tip():
     """Show the next tip in the list"""
     if len(st.session_state.contextual_tips) > 0:
-        st.session_state.current_tip_index = (st.session_state.current_tip_index + 1) % len(st.session_state.contextual_tips)
+        st.session_state.current_tip_index = (
+            st.session_state.current_tip_index + 1) % len(st.session_state.contextual_tips)
+
 
 def previous_tip():
     """Show the previous tip in the list"""
     if len(st.session_state.contextual_tips) > 0:
-        st.session_state.current_tip_index = (st.session_state.current_tip_index - 1) % len(st.session_state.contextual_tips)
+        st.session_state.current_tip_index = (
+            st.session_state.current_tip_index - 1) % len(st.session_state.contextual_tips)
+
 
 def load_tips(transactions_df=None):
     """Load financial tips based on transaction data
-    
+
     Args:
         transactions_df (pandas.DataFrame, optional): Transaction data
     """
     # Get tip of the day
     st.session_state.tip_of_the_day = get_tip_of_the_day(transactions_df)
-    
+
     # Get contextual tips (more than one for navigation)
     st.session_state.contextual_tips = get_contextual_tips(transactions_df, 5)
-    
+
     # Reset tip index
     st.session_state.current_tip_index = 0
-    
+
     # Mark as initialized
     st.session_state.tip_widget_initialized = True
 
+
 def tip_widget_button(location="sidebar"):
     """Display a button to toggle the tip widget
-    
+
     Args:
         location (str): Where to display the button ("sidebar" or "main")
     """
     # Initialize state if needed
     initialize_tip_state()
-    
+
     # Create custom styled button
     button_style = """
     <style>
@@ -93,7 +101,7 @@ def tip_widget_button(location="sidebar"):
     }
     </style>
     """
-    
+
     # Create the button with JavaScript for click handling
     button_html = f"""
     <div class="tip-widget-button" id="tip-button" onclick="toggleTip()">
@@ -112,7 +120,7 @@ def tip_widget_button(location="sidebar"):
     }}
     </script>
     """
-    
+
     # Create a container for the button
     if location == "sidebar":
         with st.sidebar:
@@ -120,16 +128,16 @@ def tip_widget_button(location="sidebar"):
             if st.session_state.get('toggle_tip', False):
                 toggle_tip_widget()
                 st.session_state['toggle_tip'] = False
-                
+
             # Display the regular button as fallback
             st.button(
-                "💡 Financial Tips", 
+                "💡 Financial Tips",
                 on_click=toggle_tip_widget,
                 help="Show or hide financial tips based on your spending patterns",
                 use_container_width=True,
                 key="tip_button_sidebar"
             )
-            
+
             # Add styling to make the button stand out
             st.markdown("""
             <style>
@@ -148,16 +156,16 @@ def tip_widget_button(location="sidebar"):
         if st.session_state.get('toggle_tip', False):
             toggle_tip_widget()
             st.session_state['toggle_tip'] = False
-            
+
         # Display the regular button as fallback for main area
         st.button(
-            "💡 Financial Tips", 
+            "💡 Financial Tips",
             on_click=toggle_tip_widget,
             help="Show or hide financial tips based on your spending patterns",
             use_container_width=False,
             key="tip_button_main"
         )
-        
+
         # Add styling for the main button
         st.markdown("""
         <style>
@@ -172,30 +180,31 @@ def tip_widget_button(location="sidebar"):
         </style>
         """, unsafe_allow_html=True)
 
+
 def display_tip_widget(transactions_df=None):
     """Display the financial tips popup widget
-    
+
     Args:
         transactions_df (pandas.DataFrame, optional): Transaction data
     """
     # Initialize state if needed
     initialize_tip_state()
-    
+
     # Load tips if not already initialized or if we have new transaction data
     if not st.session_state.tip_widget_initialized or transactions_df is not None:
         load_tips(transactions_df)
-    
+
     # Only display if session state shows it should be visible
     if st.session_state.show_tip_widget:
         # Create a container for the popup
         with st.container():
             # Create a styled box for the popup with improved design and contextual indicator
             tip_content = st.session_state.contextual_tips[st.session_state.current_tip_index] if st.session_state.contextual_tips else st.session_state.tip_of_the_day or "Set clear financial goals to help guide your spending decisions."
-            
+
             # Determine if tip is contextual based on transaction data
             is_contextual = transactions_df is not None and not transactions_df.empty
             contextual_badge = """<span style="background-color: #4682b4; color: white; padding: 3px 8px; border-radius: 10px; font-size: 0.7em; margin-left: 10px;">Personalized</span>""" if is_contextual else ""
-            
+
             # Apply CSS for the tip widget
             st.markdown("""
             <style>
@@ -204,10 +213,11 @@ def display_tip_widget(transactions_df=None):
                 border-radius: 12px;
                 padding: 20px;
                 border-left: 5px solid #4682b4;
-                margin: 15px 0;
+                margin: 15px auto; /* Center the card */
                 box-shadow: 0 6px 12px rgba(0,0,0,0.15);
                 position: relative;
                 overflow: hidden;
+                max-width: 600px; /* Make the card smaller */
             }
             .tip-container::before {
                 content: '';
@@ -252,7 +262,7 @@ def display_tip_widget(transactions_df=None):
             }
             </style>
             """, unsafe_allow_html=True)
-            
+
             # Create the tip content HTML
             tip_html = f"""
             <div class="tip-container">
@@ -270,21 +280,27 @@ def display_tip_widget(transactions_df=None):
             </div>
             """
             st.markdown(tip_html, unsafe_allow_html=True)
-            
-            # Improved navigation buttons with tooltips
+
+            # Improved navigation buttons with updated icons
             if len(st.session_state.contextual_tips) > 1:
                 cols = st.columns([1, 1, 3, 1, 1])
                 with cols[0]:
-                    st.button("⬅️", key="prev_tip_btn", on_click=previous_tip, help="Previous tip")
+                    st.button("⬅️ Previous", key="prev_tip_btn",
+                              on_click=previous_tip, help="Previous tip")
                 with cols[1]:
-                    st.button("➡️", key="next_tip_btn", on_click=next_tip, help="Next tip")
+                    st.button("➡️ Next", key="next_tip_btn",
+                              on_click=next_tip, help="Next tip")
                 with cols[3]:
-                    st.button("🔄", key="refresh_tip_btn", on_click=lambda: load_tips(transactions_df), help="Refresh tips")
+                    st.button("🔄 Refresh", key="refresh_tip_btn", on_click=lambda: load_tips(
+                        transactions_df), help="Refresh tips")
                 with cols[4]:
-                    st.button("✖️", key="close_tip_btn", on_click=toggle_tip_widget, help="Close tips")
+                    st.button("✖️ Close", key="close_tip_btn",
+                              on_click=toggle_tip_widget, help="Close tips")
             else:
                 cols = st.columns([5, 1, 1])
                 with cols[1]:
-                    st.button("🔄", key="refresh_tip_btn_single", on_click=lambda: load_tips(transactions_df), help="Refresh tips")
+                    st.button("🔄 Refresh", key="refresh_tip_btn_single", on_click=lambda: load_tips(
+                        transactions_df), help="Refresh tips")
                 with cols[2]:
-                    st.button("✖️", key="close_tip_btn_single", on_click=toggle_tip_widget, help="Close tips")
+                    st.button("✖️ Close", key="close_tip_btn_single",
+                              on_click=toggle_tip_widget, help="Close tips")

@@ -10,6 +10,11 @@ credentials:
       password: $2b$12$QGJ0gtHIq1rVl4r8FWBte.eOa1Yy7xp/m2bBVdexDQGcxkhngTKku
       phone_number: '254712345678'
       role: user
+    janedoe:
+      email: janedoe@gmail.com
+      name: Jane Doe
+      password: $2b$12$T2ROoDDkpUhrK2ltJbQw..IcZwVF.2/HBaOBAu3f5bVOUOAH7yp1a
+      phone_number: '254790339393'
     johndoe:
       email: abrahamostrich376@gmail.com
       name: John Doe
